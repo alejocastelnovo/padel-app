@@ -9,6 +9,7 @@ function createWindow() {
         require('electron-reloader')(module);
       } catch {} // Solo en desarrollo
     
+      
 
     mainWindow = new BrowserWindow({
         width: 1200,
