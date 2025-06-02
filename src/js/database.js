@@ -28,6 +28,15 @@ db.serialize(() => {
         FOREIGN KEY (cancha_id) REFERENCES canchas(id)
     )
     `);
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS configuracion (
+        id INTEGER PRIMARY KEY,
+        nombre_complejo TEXT,
+        logo BLOB,
+        info_contacto TEXT
+    );
+`);
 });
 
 module.exports = db;
