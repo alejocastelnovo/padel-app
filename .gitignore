@@ -1,5 +1,5 @@
 # ================================
-# Ignorar archivos de desarrollo
+# Archivos a ignorar en Git
 # ================================
 
 # Dependencias y builds
@@ -12,7 +12,7 @@
 *.rpm
 *.zip
 
-# Base de datos SQLite (puedes omitir esto si quieres versionar la DB vacía)
+# Base de datos SQLite 
 *.db
 *.db-journal
 *.sqlite
