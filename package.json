@@ -2,13 +2,13 @@
   "name": "padel-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Lautaro Cortez, Castelnovo Alejo",
   "license": "ISC",
   "devDependencies": {
     "electron": "^36.3.2",
