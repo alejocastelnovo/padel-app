@@ -1,0 +1,26 @@
+# ================================
+# Ignorar archivos de desarrollo
+# ================================
+
+# Dependencias y builds
+/node_modules/
+/dist/
+/out/
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.zip
+
+# Base de datos SQLite (puedes omitir esto si quieres versionar la DB vacía)
+*.db
+*.db-journal
+*.sqlite
+
+# Logs y caché
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+.thumbs.db
