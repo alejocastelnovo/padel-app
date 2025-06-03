@@ -90,3 +90,48 @@ function mostrarConfiguracion() {
             </form>
         </div>`;
 }
+
+// Datos de ejemplo (puedes luego traerlos de una base de datos o configuración)
+const canchas = [
+    { numero: 1, tipo: 'Indoor', disponible: true, iluminacion: true, techado: true },
+    { numero: 2, tipo: 'Indoor', disponible: true, iluminacion: true, techado: true },
+    { numero: 3, tipo: 'Indoor', disponible: false, iluminacion: true, techado: true },
+    { numero: 4, tipo: 'Outdoor', disponible: true, iluminacion: true, techado: false },
+    { numero: 5, tipo: 'Outdoor', disponible: true, iluminacion: false, techado: false },
+    { numero: 6, tipo: 'Outdoor', disponible: false, iluminacion: false, techado: false }
+];
+
+// Resúmenes
+const reservasHoy = 4;
+const ingresosMes = 21000;
+const ocupacion = 45;
+
+// Mostrar resúmenes
+document.getElementById('resumenReservasHoy').textContent = reservasHoy;
+document.getElementById('resumenIngresos').textContent = `$${ingresosMes.toLocaleString()}`;
+document.getElementById('resumenOcupacion').textContent = `${ocupacion}%`;
+
+const canchasDisponibles = canchas.filter(c => c.disponible).length;
+document.getElementById('resumenCanchasDisponibles').innerHTML = `${canchasDisponibles} <span class="text-muted" style="font-size:0.9em;">de ${canchas.length} canchas</span>`;
+
+// Mostrar estado de canchas
+const estadoCanchas = document.getElementById('estadoCanchas');
+estadoCanchas.innerHTML = '';
+canchas.forEach(c => {
+    const card = document.createElement('div');
+    card.className = `p-3 rounded text-center`;
+    card.style.width = '180px';
+    card.style.background = c.disponible ? '#e8ffe8' : '#ffeaea';
+    card.style.border = c.disponible ? '1px solid #b2f5b2' : '1px solid #ffb2b2';
+
+    card.innerHTML = `
+        <div class="fw-bold mb-2">Cancha ${c.numero}</div>
+        <div>
+            <span class="badge rounded-pill ${c.tipo === 'Indoor' ? 'bg-primary' : 'bg-warning text-dark'}">${c.tipo}</span>
+        </div>
+        <div class="mt-2">
+            <span class="badge rounded-pill ${c.disponible ? 'bg-success' : 'bg-danger'}">${c.disponible ? 'Disponible' : 'Ocupada'}</span>
+        </div>
+    `;
+    estadoCanchas.appendChild(card);
+});
