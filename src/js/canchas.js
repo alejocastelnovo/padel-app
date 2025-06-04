@@ -50,26 +50,24 @@ function crearCardCancha(cancha) {
     const div = document.createElement('div');
     div.className = 'court-status-card';
     div.innerHTML = `
-        <div class="card-body">
-            <div>
-                <h5 class="card-title">${cancha.nombre}</h5>
+        <div class="court-card-body">
+            <div class="court-info">
+                <h5 class="card-title mb-2">${cancha.nombre}</h5>
                 <p class="card-subtitle mb-2 text-muted">
-                    ${cancha.tipo === 'abierta' ? 'Outdoor' : 'Indoor'} - 
+                    ${cancha.tipo === 'outdoor' ? 'Outdoor' : 'Indoor'} - 
                     $${cancha.precio_hora}/hora
                 </p>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <button class="btn btn-sm btn-outline-primary" onclick="verTurnos(${cancha.id})">
-                    Ver Turnos
+            <div class="court-actions">
+                <button class="btn btn-court-action btn-ver-turnos" onclick="verTurnos(${cancha.id})">
+                    <i class="fas fa-calendar"></i> Ver Turnos
                 </button>
-                <div>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="editarCancha(${cancha.id})">
-                        Editar
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarCancha(${cancha.id})">
-                        Eliminar
-                    </button>
-                </div>
+                <button class="btn btn-court-action btn-editar" onclick="editarCancha(${cancha.id})">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-court-action btn-eliminar" onclick="eliminarCancha(${cancha.id})">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
             </div>
         </div>
     `;
@@ -94,16 +92,11 @@ btnGuardarCancha.addEventListener('click', async () => {
             return;
         }
 
-        console.log('Intentando guardar cancha:', { nombre, precioHora: precioHoraNum, tipo });
-        
         const result = await window.electronAPI.run(
             'INSERT INTO canchas (nombre, precio_hora, tipo) VALUES (?, ?, ?)',
             [nombre, precioHoraNum, tipo]
         );
-        
-        console.log('Resultado de guardar cancha:', result);
 
-        // Cerrar modal y recargar canchas
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalNuevaCancha'));
         modal.hide();
         formNuevaCancha.reset();
@@ -206,4 +199,4 @@ async function actualizarEstadisticas() {
     } catch (error) {
         console.error('Error al actualizar estadísticas:', error);
     }
-} 
+}

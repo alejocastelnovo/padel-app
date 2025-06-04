@@ -2,31 +2,33 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const Logger = require('./utils/logger');
 
 let mainWindow;
 let db;
+let logger;
 
 // Inicializar la base de datos
 async function initDatabase() {
     const dbPath = path.join(app.getPath('userData'), 'padel.db');
-    console.log('Ruta de la base de datos:', dbPath);
+    logger.info(`Iniciando base de datos en: ${dbPath}`);
 
     // Asegurarse de que el directorio existe
     const dbDir = path.dirname(dbPath);
     if (!fs.existsSync(dbDir)) {
-        console.log('Creando directorio para la base de datos:', dbDir);
+        logger.info(`Creando directorio para la base de datos: ${dbDir}`);
         fs.mkdirSync(dbDir, { recursive: true });
     }
 
     // Verificar si el archivo de la base de datos existe
     const dbExists = fs.existsSync(dbPath);
-    console.log('¿La base de datos existe?', dbExists);
+    logger.info(`¿La base de datos existe? ${dbExists}`);
 
     db = new sqlite3.Database(dbPath, (err) => {
         if (err) {
-            console.error('Error al conectar con la base de datos:', err);
+            logger.error('Error al conectar con la base de datos', err);
         } else {
-            console.log('Conexión exitosa con la base de datos');
+            logger.info('Conexión exitosa con la base de datos');
             createTables();
         }
     });
@@ -34,7 +36,7 @@ async function initDatabase() {
 
 // Crear tablas
 function createTables() {
-    console.log('Iniciando creación de tablas...');
+    logger.info('Iniciando creación de tablas...');
     
     db.serialize(() => {
         // Tabla de canchas
@@ -44,18 +46,23 @@ function createTables() {
             precio_hora REAL NOT NULL,
             tipo TEXT NOT NULL,
             activa INTEGER DEFAULT 1,
+            descripcion TEXT,
+            superficie TEXT,
+            techada BOOLEAN DEFAULT 0,
+            iluminacion BOOLEAN DEFAULT 1,
+            dimensiones TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`, (err) => {
             if (err) {
-                console.error('Error al crear tabla canchas:', err);
+                logger.error('Error al crear tabla canchas:', err);
             } else {
-                console.log('Tabla canchas creada o ya existente');
+                logger.info('Tabla canchas creada o ya existente');
                 // Verificar si hay datos en la tabla
                 db.get('SELECT COUNT(*) as count FROM canchas', (err, row) => {
                     if (err) {
-                        console.error('Error al contar canchas:', err);
+                        logger.error('Error al contar canchas:', err);
                     } else {
-                        console.log('Número de canchas en la base de datos:', row.count);
+                        logger.info(`Número de canchas en la base de datos: ${row.count}`);
                     }
                 });
             }
@@ -75,9 +82,9 @@ function createTables() {
             FOREIGN KEY (cancha_id) REFERENCES canchas(id)
         )`, (err) => {
             if (err) {
-                console.error('Error al crear tabla reservas:', err);
+                logger.error('Error al crear tabla reservas:', err);
             } else {
-                console.log('Tabla reservas creada o ya existente');
+                logger.info('Tabla reservas creada o ya existente');
             }
         });
 
@@ -89,9 +96,9 @@ function createTables() {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`, (err) => {
             if (err) {
-                console.error('Error al crear tabla configuracion:', err);
+                logger.error('Error al crear tabla configuracion:', err);
             } else {
-                console.log('Tabla configuracion creada o ya existente');
+                logger.info('Tabla configuracion creada o ya existente');
             }
         });
     });
@@ -168,6 +175,7 @@ ipcMain.handle('db-run', async (event, sql, params = []) => {
 });
 
 app.whenReady().then(() => {
+    logger = new Logger(app);
     initDatabase();
     createWindow();
 });
