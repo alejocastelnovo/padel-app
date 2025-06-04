@@ -1,0 +1,222 @@
+/* Variables globales */
+:root {
+    --primary-color: #4a90e2;
+    --primary-dark: #357abd;
+    --primary-rgb: 74, 144, 226;
+    --text-dark: #2c3e50;
+    --text-muted: #6c757d;
+    --border-color: #e9ecef;
+    --bg-light: #f8f9fa;
+    --border-radius: 8px;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Estilos base */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+/* Layout principal */
+.d-flex {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background: white;
+    height: 100vh;
+    padding: 1rem;
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+/* Contenido principal */
+.main-content {
+    flex: 1;
+    margin-left: 240px;
+    padding: 1rem;
+    min-height: 100vh;
+    background: var(--bg-light);
+}
+
+/* Header y contenido */
+.content-header {
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
+}
+
+.content-body {
+    background: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Tarjetas de estadísticas */
+.stats-container {
+    margin-top: 0.75rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border-color);
+}
+
+.stat-icon {
+    font-size: 1.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-light);
+    border-radius: 6px;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-title {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-bottom: 0.125rem;
+}
+
+.stat-value {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Tarjetas de canchas */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+.court-status-card {
+    flex: 0 0 auto;
+    width: 180px;
+    height: 120px;
+    padding: 0.75rem;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.court-status-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Botones */
+.btn {
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* Tablas */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-weight: 600;
+    background: var(--bg-light);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table-hover tbody tr:hover {
+    background: var(--bg-light);
+}
+
+/* Formularios */
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-rgb), 0.25);
+}
+
+.input-group-text {
+    background: var(--bg-light);
+    border-color: var(--border-color);
+}
+
+/* Modales */
+.modal-content {
+    border: none;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+.modal-footer {
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .court-status-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
