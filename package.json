@@ -1,11 +1,12 @@
 {
   "name": "padel-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aplicación para gestión de canchas de pádel",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "electron . --debug"
   },
   "keywords": [],
   "author": "Lautaro Cortez, Castelnovo Alejo",
