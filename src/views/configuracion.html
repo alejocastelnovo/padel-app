@@ -38,31 +38,111 @@
                 <div class="card-body">
                     <h3 class="card-title mb-4">Configuración del Complejo</h3>
                     <form id="configForm">
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label class="form-label">Nombre del Complejo</label>
                             <input type="text" class="form-control" id="nombreComplejo" required>
                         </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcionComplejo" rows="3"></textarea>
+                        <div class="mb-3">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccionComplejo" required>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">Horario de Atención</label>
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <input type="time" class="form-control" id="horarioInicio">
+                        <div class="mb-3">
+                            <label class="form-label">Días habilitados para reservas</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Lunes" id="diaLunes">
+                                    <label class="form-check-label" for="diaLunes">Lunes</label>
                                 </div>
-                                <div class="col-6">
-                                    <input type="time" class="form-control" id="horarioFin">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Martes" id="diaMartes">
+                                    <label class="form-check-label" for="diaMartes">Martes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Miércoles" id="diaMiercoles">
+                                    <label class="form-check-label" for="diaMiercoles">Miércoles</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Jueves" id="diaJueves">
+                                    <label class="form-check-label" for="diaJueves">Jueves</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Viernes" id="diaViernes">
+                                    <label class="form-check-label" for="diaViernes">Viernes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Sábado" id="diaSabado">
+                                    <label class="form-check-label" for="diaSabado">Sábado</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Domingo" id="diaDomingo">
+                                    <label class="form-check-label" for="diaDomingo">Domingo</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">Información de Contacto</label>
-                            <input type="tel" class="form-control mb-2" id="telefonoComplejo" placeholder="Teléfono">
-                            <input type="email" class="form-control mb-2" id="emailComplejo" placeholder="Email">
-                            <input type="text" class="form-control" id="direccionComplejo" placeholder="Dirección">
+                        <div class="mb-3">
+                            <label class="form-label">Horario de Atención</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="time" class="form-control" id="horarioInicio" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="time" class="form-control" id="horarioFin" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Precios</label>
+                            <div class="row g-2 mb-2">
+                                <div class="col-4">
+                                    <input type="number" class="form-control" id="precioBase" placeholder="Base ($)" min="0" required>
+                                </div>
+                                <div class="col-4">
+                                    <input type="number" class="form-control" id="precioFeriado" placeholder="Feriado ($)" min="0">
+                                </div>
+                                <div class="col-4">
+                                    <input type="number" class="form-control" id="precioNoche" placeholder="Después de 21hs ($)" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Métodos de Pago Aceptados</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Efectivo" id="pagoEfectivo">
+                                    <label class="form-check-label" for="pagoEfectivo">Efectivo</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Débito" id="pagoDebito">
+                                    <label class="form-check-label" for="pagoDebito">Débito</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Crédito" id="pagoCredito">
+                                    <label class="form-check-label" for="pagoCredito">Crédito</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="MercadoPago" id="pagoMP">
+                                    <label class="form-check-label" for="pagoMP">MercadoPago</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="Transferencia" id="pagoTransferencia">
+                                    <label class="form-check-label" for="pagoTransferencia">Transferencia</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Configuración de Reportes</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label">Rango de Fecha</label>
+                                    <input type="date" class="form-control" id="reporteFechaInicio">
+                                    <input type="date" class="form-control mt-1" id="reporteFechaFin">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Rango de Hora</label>
+                                    <input type="time" class="form-control" id="reporteHoraInicio">
+                                    <input type="time" class="form-control mt-1" id="reporteHoraFin">
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Guardar Configuración</button>
                     </form>
@@ -70,8 +150,6 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/configuracion.js"></script>
 </body>
 </html>
