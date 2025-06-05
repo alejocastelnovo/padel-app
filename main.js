@@ -101,6 +101,22 @@ function createTables() {
                 logger.info('Tabla configuracion creada o ya existente');
             }
         });
+
+        // Agregar columna notas a reservas si no existe
+        db.run(`ALTER TABLE reservas ADD COLUMN notas TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) {
+                logger.error('Error al agregar columna notas:', err);
+            } else if (!err) {
+                logger.info('Columna notas agregada a reservas');
+            }
+        });
+
+        // Agregar columna metodo_pago a reservas si no existe
+        db.run(`ALTER TABLE reservas ADD COLUMN metodo_pago TEXT`, (err) => {
+            if (err && !err.message.includes('duplicate column')) {
+                logger.error('Error al agregar columna metodo_pago:', err);
+            }
+        });
     });
 }
 
