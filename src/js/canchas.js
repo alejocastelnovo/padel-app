@@ -2,6 +2,11 @@
 const listaCanchas = document.getElementById('listaCanchas');
 const formNuevaCancha = document.getElementById('formNuevaCancha');
 const btnGuardarCancha = document.getElementById('btnGuardarCancha');
+const modalNuevaCancha = document.getElementById('modalNuevaCancha');
+const bsModalNuevaCancha = new bootstrap.Modal(modalNuevaCancha);
+const modalEditarCancha = document.getElementById('modalEditarCancha');
+const bsModalEditarCancha = new bootstrap.Modal(modalEditarCancha);
+const btnActualizarCancha = document.getElementById('btnActualizarCancha');
 
 // Cargar canchas al iniciar
 document.addEventListener('DOMContentLoaded', async () => {
@@ -75,37 +80,71 @@ function crearCardCancha(cancha) {
 }
 
 // Función para guardar una nueva cancha
-btnGuardarCancha.addEventListener('click', async () => {
+btnGuardarCancha.addEventListener('click', async (e) => {
+    e.preventDefault();
+    
+    // Obtener el formulario y validar
+    const form = document.getElementById('formNuevaCancha');
+    form.classList.add('was-validated');
+    
+    if (!form.checkValidity()) {
+        return;
+    }
+
     try {
         const nombre = document.getElementById('nombreCancha').value.trim();
         const precioHora = document.getElementById('precioHora').value.trim();
         const tipo = document.getElementById('tipoCancha').value;
 
-        if (!nombre || !precioHora || !tipo) {
-            mostrarError('Por favor complete todos los campos');
+        const precioHoraNum = parseFloat(precioHora);
+        
+        // Validaciones adicionales
+        if (!nombre || nombre.length < 3) {
+            mostrarError('El nombre debe tener al menos 3 caracteres');
             return;
         }
 
-        const precioHoraNum = parseFloat(precioHora);
         if (isNaN(precioHoraNum) || precioHoraNum <= 0) {
             mostrarError('El precio por hora debe ser un número válido mayor a 0');
             return;
         }
 
+        if (!tipo) {
+            mostrarError('Seleccione un tipo de cancha');
+            return;
+        }
+
+        // Insertar en la base de datos
         const result = await window.electronAPI.run(
-            'INSERT INTO canchas (nombre, precio_hora, tipo) VALUES (?, ?, ?)',
+            'INSERT INTO canchas (nombre, precio_hora, tipo, activa) VALUES (?, ?, ?, 1)',
             [nombre, precioHoraNum, tipo]
         );
 
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalNuevaCancha'));
-        modal.hide();
-        formNuevaCancha.reset();
+        // Limpiar y cerrar el modal
+        form.reset();
+        form.classList.remove('was-validated');
+        bsModalNuevaCancha.hide();
+        
+        // Recargar canchas y mostrar mensaje de éxito
         await cargarCanchas();
-        mostrarExito('Cancha guardada exitosamente');
+        mostrarExito('Cancha agregada exitosamente');
     } catch (error) {
         console.error('Error al guardar cancha:', error);
-        mostrarError('Error al guardar la cancha: ' + error.message);
+        mostrarError('Error al guardar la cancha: ' + (error.message || 'Error desconocido'));
     }
+});
+
+// Agregar este event listener para limpiar el formulario cuando se cierre el modal
+modalNuevaCancha.addEventListener('hidden.bs.modal', () => {
+    const form = document.getElementById('formNuevaCancha');
+    form.reset();
+    form.classList.remove('was-validated');
+});
+
+modalEditarCancha.addEventListener('hidden.bs.modal', () => {
+    const form = document.getElementById('formEditarCancha');
+    form.reset();
+    form.classList.remove('was-validated');
 });
 
 // Función para mostrar errores
@@ -144,7 +183,6 @@ function mostrarExito(mensaje) {
 
 // Funciones para las acciones de las canchas
 window.verTurnos = (id) => {
-    // Implementaremos esto más adelante
     console.log('Ver turnos de cancha:', id);
 };
 
@@ -152,12 +190,20 @@ window.editarCancha = async (id) => {
     try {
         console.log('Intentando editar cancha:', id);
         const cancha = await window.electronAPI.queryOne('SELECT * FROM canchas WHERE id = ?', [id]);
+        
         if (!cancha) {
             mostrarError('Cancha no encontrada');
             return;
         }
-        // Implementaremos el modal de edición más adelante
-        console.log('Cancha encontrada:', cancha);
+
+        // Cargar datos en el formulario
+        document.getElementById('editarCanchaId').value = cancha.id;
+        document.getElementById('editarNombreCancha').value = cancha.nombre;
+        document.getElementById('editarPrecioHora').value = cancha.precio_hora;
+        document.getElementById('editarTipoCancha').value = cancha.tipo;
+
+        // Mostrar modal
+        bsModalEditarCancha.show();
     } catch (error) {
         console.error('Error al obtener cancha:', error);
         mostrarError('Error al cargar la cancha: ' + error.message);
@@ -194,9 +240,67 @@ async function actualizarEstadisticas() {
         document.getElementById('totalOutdoor').textContent = outdoor;
         
         // Precio promedio
-        const precioPromedio = canchas.reduce((acc, curr) => acc + curr.precio_hora, 0) / canchas.length;
+        const precioPromedio = canchas.length > 0 
+            ? canchas.reduce((acc, curr) => acc + curr.precio_hora, 0) / canchas.length 
+            : 0;
         document.getElementById('precioPromedio').textContent = `$${precioPromedio.toFixed(2)}`;
     } catch (error) {
         console.error('Error al actualizar estadísticas:', error);
+        mostrarError('Error al actualizar estadísticas');
     }
 }
+
+btnActualizarCancha.addEventListener('click', async (e) => {
+    e.preventDefault();
+    
+    const form = document.getElementById('formEditarCancha');
+    form.classList.add('was-validated');
+    
+    if (!form.checkValidity()) {
+        return;
+    }
+
+    try {
+        const id = document.getElementById('editarCanchaId').value;
+        const nombre = document.getElementById('editarNombreCancha').value.trim();
+        const precioHora = document.getElementById('editarPrecioHora').value.trim();
+        const tipo = document.getElementById('editarTipoCancha').value;
+
+        const precioHoraNum = parseFloat(precioHora);
+        
+        // Validaciones
+        if (!nombre || nombre.length < 3) {
+            mostrarError('El nombre debe tener al menos 3 caracteres');
+            return;
+        }
+
+        if (isNaN(precioHoraNum) || precioHoraNum <= 0) {
+            mostrarError('El precio por hora debe ser un número válido mayor a 0');
+            return;
+        }
+
+        if (!tipo) {
+            mostrarError('Seleccione un tipo de cancha');
+            return;
+        }
+
+        // Actualizar en la base de datos
+        await window.electronAPI.run(
+            'UPDATE canchas SET nombre = ?, precio_hora = ?, tipo = ? WHERE id = ?',
+            [nombre, precioHoraNum, tipo, id]
+        );
+
+        // Cerrar modal y limpiar formulario
+        form.reset();
+        form.classList.remove('was-validated');
+        bsModalEditarCancha.hide();
+        
+        // Recargar canchas y mostrar mensaje de éxito
+        await cargarCanchas();
+        mostrarExito('Cancha actualizada exitosamente');
+    } catch (error) {
+        console.error('Error al actualizar cancha:', error);
+        mostrarError('Error al actualizar la cancha: ' + (error.message || 'Error desconocido'));
+    }
+});
+

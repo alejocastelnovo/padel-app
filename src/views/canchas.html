@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Canchas - Pádel Manager</title>
@@ -102,30 +103,93 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="formNuevaCancha">
+                            <form id="formNuevaCancha" novalidate>
                                 <div class="mb-3">
                                     <label class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombreCancha" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Precio por Hora</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="precioHora" required>
+                                    <input type="text" class="form-control" id="nombreCancha" required minlength="3"
+                                        maxlength="50" placeholder="Ej: Cancha 1">
+                                    <div class="invalid-feedback">
+                                        El nombre es requerido y debe tener entre 3 y 50 caracteres
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Tipo</label>
+                                    <label class="form-label">Precio total por Hora</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="precioHora" required min="0"
+                                            step="0.01" placeholder="0.00">
+                                        <div class="invalid-feedback">
+                                            Ingrese un precio válido mayor a 0
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de cancha</label>
                                     <select class="form-select" id="tipoCancha" required>
-                                        <option value="outdoor">Outdoor</option>
-                                        <option value="indoor">Indoor</option>
+                                        <option value="">Seleccione un tipo</option>
+                                        <option value="abierta">Outdoor</option>
+                                        <option value="cerrada">Indoor</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un tipo de cancha
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="button" class="btn btn-primary" id="btnGuardarCancha">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Editar Cancha -->
+            <div class="modal fade" id="modalEditarCancha" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar Cancha</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formEditarCancha" novalidate>
+                                <input type="hidden" id="editarCanchaId">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="editarNombreCancha" required
+                                        minlength="3" maxlength="50" placeholder="Ej: Cancha 1">
+                                    <div class="invalid-feedback">
+                                        El nombre es requerido y debe tener entre 3 y 50 caracteres
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Precio por Hora</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="editarPrecioHora"
+                                            required min="0" step="0.01" placeholder="0.00">
+                                        <div class="invalid-feedback">
+                                            Ingrese un precio válido mayor a 0
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo</label>
+                                    <select class="form-select" id="editarTipoCancha" required>
+                                        <option value="">Seleccione un tipo</option>
+                                        <option value="abierta">Outdoor</option>
+                                        <option value="cerrada">Indoor</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un tipo de cancha
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="btnActualizarCancha">Guardar Cambios</button>
                         </div>
                     </div>
                 </div>
@@ -211,4 +275,5 @@
     </div>
     <script src="../js/canchas.js"></script>
 </body>
+
 </html>
