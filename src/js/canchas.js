@@ -96,7 +96,7 @@ btnGuardarCancha.addEventListener('click', async (e) => {
         const precioHora = document.getElementById('precioHora').value.trim();
         const tipo = document.getElementById('tipoCancha').value;
 
-        const precioHoraNum = parseFloat(precioHora);
+        let precioHoraNum = parseFloat(precioHora);
         
         // Validaciones adicionales
         if (!nombre || nombre.length < 3) {
@@ -105,8 +105,7 @@ btnGuardarCancha.addEventListener('click', async (e) => {
         }
 
         if (isNaN(precioHoraNum) || precioHoraNum <= 0) {
-            mostrarError('El precio por hora debe ser un número válido mayor a 0');
-            return;
+            precioHoraNum = await obtenerPrecioBase();
         }
 
         if (!tipo) {
@@ -302,5 +301,15 @@ btnActualizarCancha.addEventListener('click', async (e) => {
         console.error('Error al actualizar cancha:', error);
         mostrarError('Error al actualizar la cancha: ' + (error.message || 'Error desconocido'));
     }
+});
+
+async function obtenerPrecioBase() {
+    const config = await window.electronAPI.query("SELECT valor FROM configuracion WHERE clave = 'precio_base'");
+    return config.length > 0 ? parseFloat(config[0].valor) : 0;
+}
+
+document.getElementById('modalNuevaCancha').addEventListener('show.bs.modal', async () => {
+    const precioBase = await obtenerPrecioBase();
+    document.getElementById('precioHora').value = precioBase;
 });
 
